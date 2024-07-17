@@ -6,7 +6,7 @@ from torch.cuda import device_count
 from utils import get_int_bool_env
 
 class EngineConfig:
-    def __init__(self):
+    def __init__(self, model = None):
         load_dotenv()
         self.hf_home = os.getenv("HF_HOME")
         # Check if /local_metadata.json exists
@@ -20,7 +20,7 @@ class EngineConfig:
             os.environ["TRANSFORMERS_OFFLINE"] = "1"
             os.environ["HF_HUB_OFFLINE"] = "1"
             
-        self.model_name_or_path = local_metadata.get("model_name", os.getenv("MODEL_NAME"))
+        self.model_name_or_path = model or local_metadata.get("model_name", os.getenv("MODEL_NAME"))
         self.model_revision = local_metadata.get("revision", os.getenv("MODEL_REVISION")) 
         self.tokenizer_name_or_path = local_metadata.get("tokenizer_name", os.getenv("TOKENIZER_NAME")) or self.model_name_or_path
         self.tokenizer_revision = local_metadata.get("tokenizer_revision", os.getenv("TOKENIZER_REVISION"))  
